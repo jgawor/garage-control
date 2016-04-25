@@ -1,0 +1,4 @@
+---
+applications:
+- name:    mygarage
+  memory:  128M

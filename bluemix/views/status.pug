@@ -1,0 +1,17 @@
+doctype
+html
+  head
+    title Garage Door Control
+  body
+    if pi.status == 0
+     h2 The garage door is closed.
+    else
+     h2 The garage door is open.
+    button(onclick="refresh()") Refresh
+  footer
+    hr
+    p Last update #{pi.updated}.
+script.
+  function refresh() {
+    window.location.href = '/refresh/#{user}'
+  }
