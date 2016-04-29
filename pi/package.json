@@ -1,0 +1,15 @@
+{
+    "name": "garage",
+    "version": "0.0.0",
+    "dependencies": {
+        "express": "~4.x",
+        "basic-auth": "*",
+        "body-parser": "*",
+        "pug": "*",
+        "request": "*"
+    },
+    "main": "server.js",
+    "scripts": {
+        "start": "node server.js"
+    }
+}

@@ -1,0 +1,11 @@
+doctype
+html
+  head
+    title Garage Door Control
+  body
+    if status == 0
+     h2 The garage door is closed.
+    else
+     h2 The garage door is open.
+    form(action="/door/activate" method="post")
+     input(type="submit", value="Activate Door")
