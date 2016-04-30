@@ -1,27 +1,13 @@
+var fs = require('fs');
 var express = require("express")
-var auth = require('basic-auth')
 var bodyParser = require('body-parser');
 var http_client = require("request");
+var utils = require('./utils');
 
-var users = {
-  'david': { password: 'davidpwd' },
-  'jarek': { password: 'jarekpwd' },
-};
+var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 
 var data = {
-  'david': { ip: '0.0.0.0', updated: "unknown", status: 1 }
-};
-
-basicAuth = function(req, res, next) {
-    var user = auth(req);
-
-    if (!user || !users[user.name] || users[user.name].password !== user.pass) {
-      res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-      return res.send(401);
-    }
-
-    req.remoteUser = user.name;
-    return next();
+  'david': { ip: '127.0.0.1', updated: "unknown", status: 1 }
 };
 
 app = express();
@@ -37,9 +23,9 @@ function ensureSecure(req, res, next) {
 // app.all('*', ensureSecure);
 
 app.set('view engine', 'pug');
+app.use('/static', express.static(__dirname + '/static'));
 
 app.use(bodyParser.json());
-app.use(express.static(__dirname + '/public'));
 
 app.get("/", function (request, response) {
     response.render("index");
@@ -54,7 +40,7 @@ app.get("/status/:username", function (request, response) {
     }
 });
 
-app.post("/status", basicAuth, function (request, response) {
+app.post("/status", utils.basicAuth(config.users), function (request, response) {
     client_ip = request.get("x-client-ip")
 
     console.log("client ip %s", client_ip)
@@ -80,10 +66,14 @@ app.get("/refresh/:username", function (request, response) {
     if (piInfo == null) {
         response.sendStatus(404);
     } else {
-        port = "8080";
-        url = "http://" + piInfo.ip + ":" + port + "/door/status";
+        port = "9090";
+        url = "https://" + piInfo.ip + ":" + port + "/door/status";
         console.log(url);
-        http_client.get(url, {timeout: 1000 * 30}, function (error, res, body) {
+        var options = {
+            timeout: 1000 * 30,
+            strictSSL: false
+        }
+        http_client.get(url, options, function (error, res, body) {
             if (error) {
                 console.log('Error:', error);
             }
@@ -101,5 +91,5 @@ app.get("/refresh/:username", function (request, response) {
     }
 });
 
-var port = process.env.VCAP_APP_PORT || 8080;
+var port = process.env.VCAP_APP_PORT || 7070;
 app.listen(port);

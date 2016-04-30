@@ -7,11 +7,10 @@ html
      h2 The garage door is closed.
     else
      h2 The garage door is open.
-    button(onclick="refresh()") Refresh
+    form(action='/refresh/' + user)
+     input(type="submit", value="Refresh Status")
+    form(action="/door/activate" method="post")
+     input(type="submit", value="Activate Door")
   footer
     hr
     p Last update #{pi.updated}.
-script.
-  function refresh() {
-    window.location.href = '/refresh/#{user}'
-  }

@@ -33,6 +33,7 @@ var local_app_port = 8080;
 local_app.listen(local_app_port);
 
 local_app.set('view engine', 'pug');
+local_app.use('/static', express.static(__dirname + '/static'));
 
 local_app.get("/", utils.basicAuth(config.users), function (request, response) {
     response.render("status", { status: 1 });
