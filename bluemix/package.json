@@ -6,7 +6,8 @@
         "basic-auth": "*",
         "body-parser": "*",
         "pug": "*",
-        "request": "*"
+        "request": "*",
+        "dateformat": "*"
     },
     "main": "server.js",
     "scripts": {

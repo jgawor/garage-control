@@ -6,15 +6,32 @@ html
     link(rel='stylesheet', href='/static/style.css')
     meta(name="viewport", content="width=device-width, user-scalable=no, minimal-ui")
   body
-    if pi.status == 0
-     h1 The garage door is closed.
-    else
-     h1 The garage door is open.
-    form(action='/' + garageId + '/activate' method="post")
-     input(type="password", name="pin")
-     input(type="submit", value="Activate Door")
-    form(action='/' + garageId + '/refresh')
-     input(type="submit", value="Refresh Status")
-  footer
-    hr
-    p Last update #{pi.updated}.
+    form(id="activate" action='/' + garageId + '/activate' method="post")
+    form(id="refresh" action='/' + garageId + '/refresh')
+    table(border="0", style="width: 100%; height: 100%;")
+      tr
+        td(style="width: 10%")
+        td
+          div(style="text-align:center")
+            if pi.status == 0
+              input(type="image", form="activate", src="/static/app-icon-GarageDoor-closed.png", width="120", height="120")
+            else
+              input(type="image", form="activate", src="/static/app-icon-GarageDoor-open-120x120.png", width="120", height="120" )
+        td(style="width: 10%")
+      tr
+        td(style="width: 10%")
+        td
+          div(style="text-align:center")
+            div.input
+              span.label Pin: 
+              input(type="password", form="activate", name="pin")
+        td(style="width: 10%")
+      tr
+        td(style="width: 10%")
+        td
+          div(style="text-align:center")
+            h5 #{pi.updated}
+            p
+            input(type="image", form="refresh", src="static/refresh.png", width="36", height="36")
+        td(style="width: 10%; text-align:right")
+         

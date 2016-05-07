@@ -2,6 +2,7 @@ var fs = require('fs');
 var express = require("express")
 var bodyParser = require('body-parser');
 var http_client = require("request");
+var dateFormat = require('dateformat');
 var utils = require('./utils');
 
 var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
@@ -19,6 +20,10 @@ function ensureSecure(req, res, next) {
     };
     res.redirect('https://'+req.hostname+req.url);
 };
+
+function now() {
+    return dateFormat(new Date(), "default");
+}
 
 // app.all('*', ensureSecure);
 
@@ -42,13 +47,12 @@ app.post("/status", utils.basicAuth(config.users), function (request, response) 
     console.log(request.body)
     
     status = request.body.status
-    updated = new Date();
 
     piInfo = {
         'ip': client_ip,
         'port': 9090,
         'status': status,
-        'updated': updated
+        'updated': now()
     }
 
     data[request.remoteUser] = piInfo
@@ -86,7 +90,7 @@ app.get("/:garageId/refresh", function (request, response) {
                 console.log(body);
                 jsonObject = JSON.parse(body);
                 piInfo.status = jsonObject.status;
-                piInfo.updated = new Date();
+                piInfo.updated = now();
             }
             response.redirect("/" + request.params.garageId)
         });
@@ -128,7 +132,7 @@ app.post("/:garageId/activate", function (request, response) {
                     console.log(body);
                     jsonObject = JSON.parse(body);
                     piInfo.status = jsonObject.status;
-                    piInfo.updated = new Date();
+                    piInfo.updated = now();
                     response.redirect("/" + request.params.garageId)
                     return;
                 }

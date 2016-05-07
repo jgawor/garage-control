@@ -47,12 +47,14 @@ local_app.post("/door/activate", function (request, response) {
     response.render("toggle");
 });
 
+status = 0;
 
 function door_status() {
     console.log("getting door status");
-    return 0
+    return status;
 }
 
 function activate_door() {
     console.log("activating door");
+    status = 1;
 }

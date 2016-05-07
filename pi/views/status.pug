@@ -6,9 +6,9 @@ html
     link(rel='stylesheet', href='/static/style.css')
     meta(name="viewport", content="width=device-width, user-scalable=no, minimal-ui")
   body
-    if status == 0
-     h1 The garage door is closed.
-    else
-     h1 The garage door is open.
-    form(action="/door/activate" method="post")
-     input(type="submit" value="Activate Door")
+    div(style="text-align:center")
+     form(action="/door/activate" method="post")
+       if status == 0
+         input(type="image", src="/static/app-icon-GarageDoor-closed.png", width="120", height="120")
+       else
+         input(type="image", src="/static/app-icon-GarageDoor-open-120x120.png", width="120",  height="120" )
