@@ -6,7 +6,7 @@ exports.basicAuth = function(users) {
 
         if (!user || !users[user.name] || users[user.name].password !== user.pass) {
             res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-            return res.send(401);
+            return res.sendStatus(401);
         }
 
         req.remoteUser = user.name;

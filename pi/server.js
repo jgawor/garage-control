@@ -15,18 +15,20 @@ https.createServer({
     cert: fs.readFileSync('server.cert')
 }, remote_app).listen(remote_app_port);
 
-remote_app.post("/door/activate", utils.basicAuth(config.users), function (request, response) {
+remote_app.post("/api/door/activate", utils.basicAuth(config.users), function (request, response) {
     response.setHeader('Content-Type', 'application/json');
-    response.send(JSON.stringify({ a: 1 }, null, 3)); 
+    activate_door();
+    response.sendStatus(204);
 });
 
-remote_app.get("/door/status", function (request, response) {
+remote_app.get("/api/door/status", function (request, response) {
     response.setHeader('Content-Type', 'application/json');
-    response.send(JSON.stringify({ a: 1 }, null, 3));
+    status = door_status()
+    response.json({ status: status });
 });
 
 /*
- * Local app REST API
+ * Local app
  */
 local_app = express();
 var local_app_port = 8080;
@@ -35,10 +37,22 @@ local_app.listen(local_app_port);
 local_app.set('view engine', 'pug');
 local_app.use('/static', express.static(__dirname + '/static'));
 
-local_app.get("/", utils.basicAuth(config.users), function (request, response) {
-    response.render("status", { status: 1 });
+local_app.get("/", function (request, response) {
+    status = door_status()
+    response.render("status", { status: status });
 });
 
 local_app.post("/door/activate", function (request, response) {
+    activate_door();
     response.render("toggle");
 });
+
+
+function door_status() {
+    console.log("getting door status");
+    return 0
+}
+
+function activate_door() {
+    console.log("activating door");
+}
