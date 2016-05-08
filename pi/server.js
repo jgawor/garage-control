@@ -1,6 +1,7 @@
 var fs = require('fs');
 var express = require("express");
 var https = require('https');
+var process = require('child_process');
 var utils = require('./utils');
 
 var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
@@ -17,7 +18,7 @@ https.createServer({
 
 remote_app.post("/api/door/activate", utils.basicAuth(config.users), function (request, response) {
     response.setHeader('Content-Type', 'application/json');
-    activate_door();
+    door_activate();
     response.sendStatus(204);
 });
 
@@ -43,18 +44,28 @@ local_app.get("/", function (request, response) {
 });
 
 local_app.post("/door/activate", function (request, response) {
-    activate_door();
+    door_activate();
     response.render("toggle");
 });
 
-status = 0;
-
 function door_status() {
     console.log("getting door status");
+    var output = process.execSync("./scripts/control status");
+    console.log("door status", output)
+    var status = parseInt(output.toString().trim());
     return status;
 }
 
-function activate_door() {
+function door_activate() {
     console.log("activating door");
-    status = 1;
+    var output = process.execSync("./scripts/control activate");
+    console.log("door activate", output);
 }
+
+function door_init() {
+    console.log("door init");
+    var output = process.execSync("./scripts/control init");
+    console.log("door inited", output);
+}
+
+door_init();
