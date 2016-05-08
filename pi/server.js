@@ -50,7 +50,7 @@ local_app.post("/door/activate", function (request, response) {
 
 function door_status() {
     console.log("getting door status");
-    var output = process.execSync("./scripts/control status");
+    var output = process.execSync("./scripts/control.sh status");
     console.log("door status", output)
     var status = parseInt(output.toString().trim());
     return status;
@@ -58,13 +58,13 @@ function door_status() {
 
 function door_activate() {
     console.log("activating door");
-    var output = process.execSync("./scripts/control activate");
+    var output = process.execSync("./scripts/control.sh activate");
     console.log("door activate", output);
 }
 
 function door_init() {
     console.log("door init");
-    var output = process.execSync("./scripts/control init");
+    var output = process.execSync("./scripts/control.sh init");
     console.log("door inited", output);
 }
 
