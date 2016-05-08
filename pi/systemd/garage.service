@@ -1,0 +1,12 @@
+[Service]
+ExecStart=/home/pi/node-v4.4.3-linux-armv6l/bin/node server.js
+WorkingDirectory=/home/pi/garage-control/pi/
+Restart=always
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=garage
+User=pi
+Group=pi
+
+[Install]
+WantedBy=multi-user.target
