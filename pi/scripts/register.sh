@@ -3,7 +3,7 @@
 PI_DIR=`dirname $0`/..
 CONFIG="$PI_DIR/conf/config.json"
 
-status=`./scripts/control.sh status`
+status=`$PI_DIR/scripts/control.sh status`
 user=`jq -r .id $CONFIG`
 password=`jq -r .register_password $CONFIG`
 
