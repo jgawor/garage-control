@@ -1,0 +1,1 @@
+@hourly /home/pi/garage-control/pi/scripts/register.sh > /home/pi/garage-control/pi/logs/register.log 2>&1
