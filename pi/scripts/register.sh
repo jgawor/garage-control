@@ -1,6 +1,7 @@
 #!/bin/sh
 
-CONFIG="./conf/config.json"
+PI_DIR=`dirname $0`/..
+CONFIG="$PI_DIR/conf/config.json"
 
 status=`./scripts/control.sh status`
 user=`jq -r .id $CONFIG`

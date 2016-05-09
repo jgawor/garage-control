@@ -25,7 +25,9 @@ function now() {
     return dateFormat(new Date(), "default");
 }
 
-// app.all('*', ensureSecure);
+if (process.env.VCAP_SERVICES) {
+    app.all('*', ensureSecure);
+}
 
 app.set('view engine', 'pug');
 app.use('/static', express.static(__dirname + '/static'));
@@ -67,7 +69,7 @@ app.get("/:garageId", function (request, response) {
     if (piInfo == null) {
         response.sendStatus(404);
     } else {
-        response.render("status", { garageId: request.params.garageId, 'pi': piInfo});
+        response.render("status", { garageId: request.params.garageId, 'pi': piInfo, error: request.query.error} );
     }
 });
 
@@ -83,19 +85,29 @@ app.get("/:garageId/refresh", function (request, response) {
             strictSSL: false
         }
         http_client.get(url, options, function (error, res, body) {
-            console.log('Error:', error);
-            console.log('Status code:', res.statusCode);
-            
-            if (!error && res.statusCode == 200) {
-                console.log(body);
-                jsonObject = JSON.parse(body);
-                piInfo.status = jsonObject.status;
-                piInfo.updated = now();
+            if (error) {
+                console.log('Error:', error);
+                redirectWithError(response, request.params.garageId, "Error connecting to garage door controller (" + error.code + ")");
+            } else {
+                console.log('Status code:', res.statusCode);
+                if (res.statusCode == 200) {
+                    console.log(body);
+                    jsonObject = JSON.parse(body);
+                    piInfo.status = jsonObject.status;
+                    piInfo.updated = now();
+                    response.redirect("/" + request.params.garageId)
+                } else {
+                    redirectWithError(response, request.params.garageId, "Unexpected status code (" + res.statusCode + ")");
+                }
             }
-            response.redirect("/" + request.params.garageId)
         });
     }
 });
+
+function redirectWithError(response, garageId, errorMsg) {
+    var encodedMsg = encodeURIComponent(errorMsg);
+    response.redirect("/" + garageId + "?error=" + encodedMsg);
+}
 
 app.post("/:garageId/activate", function (request, response) {
     piInfo = data[request.params.garageId];
@@ -104,7 +116,7 @@ app.post("/:garageId/activate", function (request, response) {
     } else {
         pin = request.body.pin;
         if (!pin) {
-            response.status(400).send("Pin is required");
+            redirectWithError(response, request.params.garageId, "Code is required to activate the door.");
             return;
         }
         url = "https://" + piInfo.ip + ":" +  piInfo.port + "/api/door/activate";
@@ -118,27 +130,25 @@ app.post("/:garageId/activate", function (request, response) {
             }
         }
         http_client.post(url, options, function (error, res, body) {
-            console.log('Error:', error);
-            console.log('Status code:', res.statusCode);
-            
-            if (!error) {
+            if (error) {
+                console.log('Error:', error);
+                redirectWithError(response, request.params.garageId, "Error connecting to garage door controller (" + error.code + ")");
+            } else {
+                console.log('Status code:', res.statusCode);
                 if (res.statusCode == 401) {
-                    response.status(400).send("Bad pin");
-                    return;
+                    redirectWithError(response, request.params.garageId, "Code is incorrect.");
                 } else if (res.statusCode == 204) {
                     response.render("toggle", { garageId: request.params.garageId });
-                    return;
                 } else if (res.statusCode == 200) {
                     console.log(body);
                     jsonObject = JSON.parse(body);
                     piInfo.status = jsonObject.status;
                     piInfo.updated = now();
                     response.redirect("/" + request.params.garageId)
-                    return;
+                } else {
+                    redirectWithError(response, request.params.garageId, "Unexpected status code (" + res.statusCode + ")");
                 }
             }
-
-            response.redirect("/" + request.params.garageId)
         });
     }
 });
