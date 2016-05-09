@@ -4,7 +4,12 @@ var https = require('https');
 var process = require('child_process');
 var utils = require('./utils');
 
-var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+var config = JSON.parse(fs.readFileSync('conf/config.json', 'utf8'));
+
+var users = {}
+users[config.id] = {
+    "password": config.door_password
+}
 
 /*
  * Remote app REST API
@@ -12,11 +17,11 @@ var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
 remote_app = express();
 var remote_app_port = 9090;
 https.createServer({
-    key: fs.readFileSync('server.key'),
-    cert: fs.readFileSync('server.cert')
+    key: fs.readFileSync('conf/server.key'),
+    cert: fs.readFileSync('conf/server.cert')
 }, remote_app).listen(remote_app_port);
 
-remote_app.post("/api/door/activate", utils.basicAuth(config.users), function (request, response) {
+remote_app.post("/api/door/activate", utils.basicAuth(users), function (request, response) {
     response.setHeader('Content-Type', 'application/json');
     door_activate();
     response.sendStatus(204);
