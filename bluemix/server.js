@@ -5,7 +5,7 @@ var http_client = require("request");
 var dateFormat = require('dateformat');
 var utils = require('./utils');
 
-var config = JSON.parse(fs.readFileSync('config.json', 'utf8'));
+var config = JSON.parse(fs.readFileSync('conf/config.json', 'utf8'));
 
 var data = {}
 
