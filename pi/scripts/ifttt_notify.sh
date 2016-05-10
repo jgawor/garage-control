@@ -11,7 +11,6 @@ if [ "$ifttt_key" = "null" ]; then
 fi
 
 status=`$PI_DIR/scripts/control.sh status`
-status="1"
 
 if [ $status -eq "0" ]; then
     echo "Garage closed."
