@@ -7,7 +7,7 @@
         "body-parser": "*",
         "pug": "*",
         "request": "*",
-        "dateformat": "*"
+        "moment-timezone": "*"
     },
     "main": "server.js",
     "scripts": {

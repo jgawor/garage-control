@@ -2,7 +2,7 @@ var fs = require('fs');
 var express = require("express")
 var bodyParser = require('body-parser');
 var http_client = require("request");
-var dateFormat = require('dateformat');
+var moment = require('moment-timezone');
 var utils = require('./utils');
 
 var config = JSON.parse(fs.readFileSync('conf/config.json', 'utf8'));
@@ -20,7 +20,7 @@ function ensureSecure(req, res, next) {
 };
 
 function now() {
-    return dateFormat(new Date(), "default");
+    return moment().tz("America/New_York").format("dddd, MMMM Do YYYY, h:mm:ss a");
 }
 
 if (process.env.VCAP_SERVICES) {
