@@ -50,7 +50,7 @@ local_app.get("/", function (request, response) {
 
 local_app.post("/door/activate", function (request, response) {
     door_activate();
-    response.render("toggle");
+    response.render("toggle", { door_delay: config.door_delay || 15 });
 });
 
 function door_status() {

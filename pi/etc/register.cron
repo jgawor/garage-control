@@ -1,1 +1,2 @@
-@hourly /home/pi/garage-control/pi/scripts/register.sh > /home/pi/garage-control/pi/logs/register.log 2>&1
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+0 * * * * /home/pi/garage-control/pi/scripts/register.sh > /home/pi/garage-control/pi/logs/register.log 2>&1

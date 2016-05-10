@@ -1,6 +1,12 @@
 1. Install Node.js
 2. Install wrigingpi
 3. Install jq
+4. Install node dependencies
+  ```bash
+  $ cd ~/garage-control/pi
+  $ npm install
+  ```
+
 3. Create config.json
   ```json
   {
