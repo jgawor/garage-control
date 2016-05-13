@@ -51,7 +51,8 @@
   $ cp ./pi/etc/garage.service /etc/systemd/system/
   $ systemctl enable garage
   $ systemctl start garage
-
+  ```
+  
 6. Setup cron jobs. Update the script as needed.
   ```bash
   $ crontab ./pi/etc/crontab.cron
