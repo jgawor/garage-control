@@ -1,3 +1,26 @@
+# Network setup
+
+1. Configure static IP
+  * Set static ip in the `/etc/network/interfaces` file. For example:
+    ```
+    iface wlan0 inet static
+    address 192.168.0.200
+    netmask 255.255.255.0
+    gateway 192.168.0.1
+    ```
+
+  * Configure wireless in the `/etc/wpa_supplicant/wpa_supplicant.conf` file. For example:
+    ```
+    network={
+      ssid="<ssid>"
+      psk="<password>"
+    }
+    ```
+
+2. Setup port forwarding to port 9090
+
+# Software setup
+
 1. Install Node.js
 2. Install wrigingpi
 3. Install jq
@@ -12,7 +35,9 @@
   {
     "id": "myGarageName",
     "door_password": "codeToActivateGarageDoor",
-    "register_password": "codeToRegisterGarageWithBluemixApp"
+    "door_delay": 13,
+    "register_password": "codeToRegisterGarageWithBluemixApp",
+    "ifttt_key": <ifttt_api_key>
   }
   ```
 
@@ -27,8 +52,8 @@
   $ systemctl enable garage
   $ systemctl start garage
 
-6. Setup register cron job
+6. Setup cron jobs. Update the script as needed.
   ```bash
-  $ crontab ./pi/etc/register.cron
+  $ crontab ./pi/etc/crontab.cron
   ```
 
