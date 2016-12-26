@@ -153,5 +153,5 @@ app.post("/:garageId/activate", function (request, response) {
     }
 });
 
-var port = process.env.VCAP_APP_PORT || 7070;
+var port = process.env.PORT || 7070;
 app.listen(port);
