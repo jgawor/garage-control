@@ -2,14 +2,16 @@ var fs = require('fs');
 var express = require("express")
 var bodyParser = require('body-parser');
 var http_client = require("request");
-var moment = require('moment-timezone');
 var utils = require('./utils');
+var alexa = require('./alexa');
 
 var config = JSON.parse(fs.readFileSync('conf/config.json', 'utf8'));
 
 var data = {}
 
 app = express();
+
+app.use("/:garageId/alexa", alexa.verifier());
 
 function ensureSecure(req, res, next) {
     protocol = req.get("x-forwarded-proto")
@@ -18,10 +20,6 @@ function ensureSecure(req, res, next) {
     };
     res.redirect('https://'+req.hostname+req.url);
 };
-
-function now() {
-    return moment().tz("America/New_York").format("dddd, MMMM Do YYYY, h:mm:ss a");
-}
 
 if (process.env.VCAP_SERVICES) {
     app.all('*', ensureSecure);
@@ -49,17 +47,23 @@ app.post("/status", utils.basicAuth(config.users), function (request, response) 
     status = request.body.status;
     client_port = request.body.port || 9090;
     door_delay = request.body.door_delay || 15;
+    alexa_app_id = request.body.alexa_app_id;
+    access_token = request.body.access_token;
 
     piInfo = {
         'ip': client_ip,
         'port': client_port,
         'status': status,
         'door_delay': door_delay,
-        'updated': now()
+        'updated': utils.now(),
+        'alexa_app_id': alexa_app_id,
+        'access_token': access_token
     }
 
     data[request.remoteUser] = piInfo
 
+    alexa.setup(data, request.remoteUser, app)
+    
     response.sendStatus(204)
 });
 
@@ -94,7 +98,7 @@ app.get("/:garageId/refresh", function (request, response) {
                     console.log(body);
                     jsonObject = JSON.parse(body);
                     piInfo.status = jsonObject.status;
-                    piInfo.updated = now();
+                    piInfo.updated = utils.now();
                     response.redirect("/" + request.params.garageId)
                 } else {
                     redirectWithError(response, request.params.garageId, "Unexpected status code (" + res.statusCode + ")");
@@ -143,7 +147,7 @@ app.post("/:garageId/activate", function (request, response) {
                     console.log(body);
                     jsonObject = JSON.parse(body);
                     piInfo.status = jsonObject.status;
-                    piInfo.updated = now();
+                    piInfo.updated = utils.now();
                     response.redirect("/" + request.params.garageId)
                 } else {
                     redirectWithError(response, request.params.garageId, "Unexpected status code (" + res.statusCode + ")");

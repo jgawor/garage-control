@@ -1,4 +1,5 @@
 var auth = require('basic-auth')
+var moment = require('moment-timezone');
 
 exports.basicAuth = function(users) {
     return function(req, res, next) {
@@ -12,4 +13,8 @@ exports.basicAuth = function(users) {
         req.remoteUser = user.name;
         return next();
     }
+};
+
+exports.now = function() {
+    return moment().tz("America/New_York").format("dddd, MMMM Do YYYY, h:mm:ss a");
 };
