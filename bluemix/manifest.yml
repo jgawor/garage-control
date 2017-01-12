@@ -2,3 +2,4 @@
 applications:
 - name:    mygarage
   memory:  128M
+  buildpack: sdk-for-nodejs
