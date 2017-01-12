@@ -7,7 +7,9 @@
         "body-parser": "*",
         "pug": "*",
         "request": "*",
-        "moment-timezone": "*"
+        "moment-timezone": "*",
+        "alexa-app": "*",
+        "alexa-verifier": "*"
     },
     "main": "server.js",
     "scripts": {

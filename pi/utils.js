@@ -2,14 +2,13 @@ var auth = require('basic-auth')
 
 exports.basicAuth = function(users) {
     return function(req, res, next) {
-        var user = auth(req);
-
-        if (!user || !users[user.name] || users[user.name].password !== user.pass) {
+        var creds = auth(req);
+        if (creds && users[creds.name] && (users[creds.name].password === creds.pass || users[creds.name].access_token === creds.pass)) {
+            req.remoteUser = creds.name;
+            return next();
+        } else {
             res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
             return res.sendStatus(401);
         }
-
-        req.remoteUser = user.name;
-        return next();
     }
 };

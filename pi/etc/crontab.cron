@@ -1,3 +1,2 @@
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
-5 * * * * /home/pi/garage-control/pi/scripts/register.sh > /home/pi/garage-control/pi/logs/register.log 2>&1
 0 22,23 * * * /home/pi/garage-control/pi/scripts/ifttt_notify.sh > /home/pi/garage-control/pi/logs/ifttt_notify.log 2>&1

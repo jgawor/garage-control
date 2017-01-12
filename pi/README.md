@@ -37,6 +37,7 @@
     "door_password": "codeToActivateGarageDoor",
     "door_delay": 13,
     "register_password": "codeToRegisterGarageWithBluemixApp",
+    "register_url": "<UrlOfTheBluemmixApp>/status",
     "ifttt_key": <ifttt_api_key>
   }
   ```
