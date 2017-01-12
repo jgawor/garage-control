@@ -28,9 +28,9 @@ function get_status(data, name, alexa_response) {
                 piInfo.status = jsonObject.status;
                 piInfo.updated = utils.now();
                 if (piInfo.status == 0) {
-                    alexa_response.say("The door is closed");
+                    alexa_response.say("The garage door is closed");
                 } else {
-                    alexa_response.say("The door is opened");
+                    alexa_response.say("The garage door is opened");
                 }
             } else {
                 alexa_response.say("Unexpected status code (" + res.statusCode + ")");
@@ -70,15 +70,15 @@ function activate_door(data, name, alexa_response, status) {
                 alexa_response.say("The access token is incorrect.");
             } else if (res.statusCode == 204) {
                 if (status == 0) {
-                    alexa_response.say("The door is closing");
+                    alexa_response.say("The garage door is closing");
                 } else {
-                    alexa_response.say("The door is opening");
+                    alexa_response.say("The garage door is opening");
                 }
             } else if (res.statusCode == 202) {
                 if (status == 0) {
-                    alexa_response.say("The door is already closed");
+                    alexa_response.say("The garage door is already closed");
                 } else {
-                    alexa_response.say("The door is already opened");
+                    alexa_response.say("The garage door is already opened");
                 }
             } else {
                 alexa_response.say("Unexpected status code (" + res.statusCode + ")");
