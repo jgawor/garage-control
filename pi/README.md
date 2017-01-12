@@ -1,4 +1,6 @@
-# Network setup
+# Garage door controller back-end
+
+## Network setup
 
 1. Configure static IP
   * Set static ip in the `/etc/network/interfaces` file. For example:
@@ -19,7 +21,7 @@
 
 2. Setup port forwarding to port 9090
 
-# Software setup
+## Software setup
 
 1. Install Node.js
 2. Install wrigingpi
@@ -38,9 +40,12 @@
     "door_delay": 13,
     "register_password": "codeToRegisterGarageWithBluemixApp",
     "register_url": "<UrlOfTheBluemmixApp>/status",
-    "ifttt_key": <ifttt_api_key>
+    "ifttt_key": <ifttt_api_key>,
+    "alexa_app_id": "<alexa_app_id>"
   }
   ```
+
+  The `ifttt_key` and `alexa_app_id` are optional.
 
 4. Create server key and cert. For example:
   ```bash
