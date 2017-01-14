@@ -19,17 +19,6 @@ const RETRY_DELAY = 30 * 1000;
 
 var registerRetry = 0;
 
-function retry_register() {
-    if (registerRetry > 3) {
-        registerRetry = 0;
-        console.log("Giving up retrying.");
-        setTimeout(register, HOUR_DELAY)
-    } else {
-        console.log("Retrying in %s", RETRY_DELAY * registerRetry);
-        setTimeout(register, RETRY_DELAY * registerRetry);
-    }
-}
-
 var register = function() {
     var access_token = crypto.randomBytes(32).toString('hex')
     var registerData = {
@@ -62,6 +51,17 @@ var register = function() {
             }
         }
     });
+}
+
+function retry_register() {
+    if (registerRetry > 3) {
+        registerRetry = 0;
+        console.log("Giving up retrying.");
+        setTimeout(register, HOUR_DELAY)
+    } else {
+        console.log("Retrying in %s", RETRY_DELAY * registerRetry);
+        setTimeout(register, RETRY_DELAY * registerRetry);
+    }
 }
 
 /*
