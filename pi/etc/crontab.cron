@@ -1,2 +1,11 @@
 PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
+#
+# Using IFTTT to notify
+#
 0 22,23 * * * /home/pi/garage-control/pi/scripts/ifttt_notify.sh > /home/pi/garage-control/pi/logs/ifttt_notify.log 2>&1
+
+#
+# Using email to notify
+#
+0 22,23 * * * /home/pi/garage-control/pi/scripts/phone_notify.sh > /home/pi/garage-control/pi/logs/phone_notify.log 2>&1

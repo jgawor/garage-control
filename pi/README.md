@@ -41,7 +41,8 @@
     "register_password": "codeToRegisterGarageWithBluemixApp",
     "register_url": "<UrlOfTheBluemmixApp>/status",
     "ifttt_key": <ifttt_api_key>,
-    "alexa_app_id": "<alexa_app_id>"
+    "alexa_app_id": "<alexa_app_id>",
+    "notify_email": "<phone_number>@txt.att.net"
   }
   ```
 
